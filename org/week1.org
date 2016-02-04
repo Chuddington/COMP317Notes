@@ -1,0 +1,127 @@
+# Note: 'C-c C-e d' compiles this to a LaTeX document automagically in org mode
+# Note: 'C-c C-x C-l' provides in-line representation of LaTeX equations in
+#        org mode, provided you have imagemagick or other image generators
+
+* Lecture 1 - Hello COMP317
+
+** Semantics and Syntax
+This module is based on Semantics, so it is important to know what semantics is
+and why you would want to use/understand it.
+
+Semantics is 'The meaning of things.'  Semantics are most commonly used within
+languages.  As a mild example, "The man ran" and "The man runs" are semantically
+correct, but "The man run" is not - it is the modification of the verb 'run'
+which provides the correct semantics.
+
+The written form of semantics is known as 'Syntax' (in this module at least).
+If you have ever compiled your own code before and come across 'Syntax errors,'
+this means that you have written code that the compiler doesn't understand as 
+the offending code is not a part of the language's syntax.
+
+** A mild warning
+This module has a fairly high amount of formality in an attempt to define
+the semantics of languages.  I'll attempt to make it as easily readable as
+possible but it's no guarantee that it won't give you a headache afterwards.
+
+** Formal Semantics
+Formal Semantics are often a representation of Mathematical Models.  By formally
+defining these models, it becomes easier to understand both the model and
+semantics in general.  As an example:
+
+\begin{equation}
+F = ma
+\end{equation}
+
+The above example is the equation 'Force = Mass x Acceleration.'  You can make
+this equation sound simpler by saying "If you kick something, it moves.  If you
+kick it harder, it moves further."
+
+With formal semantics, you can build models (or 'worlds') and then query and
+reason with them in order to understand a particular problem, or syntax.
+
+Semantics comes in three main variants:
+
+Operational : How something is evaluated
+              Example: The method in which the Turing Machine works
+Denotational: What the program is and it's functions (input/output rules)
+              Example: Expressions = Numbers
+Axiomatic   : The logical inferences of the semantics
+              Example: { (y + 1) < 0} x = y + 1
+
+Operational Semantics also outline the limits of what computers can do.  As an
+example, it is difficult to test for bugs in recursion.  There currently is no
+way for a machine to verify if there are bugs by outputting "yes" or "no"
+
+** Computers (in a sense)
+For the purposes of this module, a computer is something which can perform
+algorithms on data structures in the form of programs.  Broken down:
+
+Algorithms     : A sequence of steps (which can modify)...
+Data Structures: Things which can store information - numbers, text etc. (in the
+                 form of)...
+Programs       : Algorithms which a computer can understand.
+
+These days we rarely, if ever, write in machine code.  There are multiple layers
+of abstraction which make what is written easier to understand for humans.
+Writing in assembly can be considered difficult for those who do not easily
+understand the syntax, whereas writing in Java or C is considered an easier
+task.
+
+The main changes are only differing syntax and the levels of abstraction
+ - once compiled/interpreted it makes no difference to a computer as it is
+still modifying memory addresses.  A high voltage could be considered the value
+'1' in binary for a machine, low voltage being '0.'
+
+Taking into account the 'Laws of Thought'
+(https://en.wikipedia.org/wiki/Law_of_thought), the main thing that differs
+between two programming languages are the semantics/syntax.
+
+** A Quick History Lesson
+A big turn for computing in general was the Turing Machine.  This machine
+formalised what computers are capable of.
+
+We can compare the Turing Machine to the Java Virtual Machine (JVM).  Both are
+simple machines - JVM was designed this way so that it is easy to port to other
+Operating Systems.  The compiled Java Bytecode could be considered the tape that
+was fed into the Turing Machine.  Java itself is a complicated language due to
+the amount of abstraction, but is broken down so that the JVM can understand 
+the programs due to the Bytecode.  This is how Java can adopt the slogan
+"Write once, run anywhere."
+
+The 'Church-Turing Thesis'
+(https://en.wikipedia.org/wiki/Church%E2%80%93Turing_thesis) worked on and
+defined recursive functions and something known as the 'Lambda Calculus'
+(https://en.wikipedia.org/wiki/Lambda_calculus).  Lambda Calculus played a large
+part in the development of Functional Programming Languages, such as Haskell
+(http://learnyouahaskell.com/) or LISP, as well as Imperative Languages, but 
+was a smaller influence.
+
+** "Hello Maude"
+Maude is the programming language that will be used within the module to define
+the syntax and semantics for the use on computers.  This makes the theory work
+executable, so long as you have correctly written it.  Maude is a logic-based,
+Functional programming language that is interpreted, instead of compiled.
+
+Denotational semantics is written in Maude to then allow Operational semantics
+(term-rewriting) to be given to the interpreter.
+
+
+** This is great and everything, but why do all this?
+One main reason is the intellectual satisfaction of solving a problem or
+successfully modelling an algorithm.  By understanding how to model a problem in
+a different language/paradigm, you are able to use this knowledge to better
+understand problems later in your life.  Semantics blends Mathematics with
+Computer Science.
+
+Another reason would be Language Design.  There are many languages currently
+available and they all need semantics to both define themselves as well as
+make each language separate from others.
+
+Formal methods is based on semantics, and helps verify the algorithms and 
+theories that you are attempting to test.  The US Army, for example, requires
+proof that the algorithm you're offering to them works for any and all 
+applicable cases without error - formal methods and semantics can help with 
+this.  Things to look at would be AVL Trees and Scanning techniques for
+metamorphic viruses
+
+* Lecture 2 - Starting Semantics (SS)
