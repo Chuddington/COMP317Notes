@@ -304,3 +304,162 @@ to transform Binary Numerals into base-10 numbers.  Being able to do this is
 the basis of the entire module, so hopefully this has been written well enough
 for you to understand the basic concepts.
 
+* Lecture 3 - Can you call the operator?
+# Note: Some of the information ahead is fragmented for the moment, due to
+# weekly problem sheets.  These would be the <Variable> and the <Number>
+# Semantic Categories.  Using the Lecture 2 Notes, you should be able to
+# define in BNF the <Number> object, which denotes a base-10 number.  The
+# problem sheet will be uploaded to help fill in the blanks in this file.
+
+** Quick re-cap
+There's a basic pattern to Languages.  You go from semantics, use Denotational
+Functions which then create a Semantic Domain.  This is how we went from Binary
+Numerals into the numbers we know and love.
+
+** Triangle games
+Formal definitions play a part in this too.  For the module, we will obtain
+syntax using BNF and our denotation will be created with Inductive definitions.
+Now take this little block of code:
+
+sum   = 0;
+count = 0;
+while(count < 100) {
+  sum   = sum   + count;
+  count = count + 1    ;
+}
+
+Hopefully this makes sense - the 'sum' and 'count' variables start off with the
+value of 0, then a while loop is called which will run a block of code until
+count is no longer lower than 100.  The block of code adds count to the current
+value of sum, then count is incremented.  If you run the first couple of values
+in your head, you should notice that the code is the triangle numbers.  Now
+we're going to implement the basics of how to implement that code in BNF.
+
+For the variable declarations, we can do this by defining:
+
+<Variable>   ::= <Expression>
+<Expression> ::= <Number> | <Variable>
+
+This solves the first two lines of the sample code, providing we have properly
+defined <Number> and <Variable> (Which is a part of the problem sheets).
+
+** Sidetrack: Basic Maude
+Variables can be defined in Maude by prefixing with the apostrophe symbol.
+If we were modelling the triangle numbers in Maude, the variables would be
+known as 'sum and 'count.
+
+This doesn't really mean much at the moment, but keep it in mind for now.
+
+** Operators
+
+Adding operators to the category is fairly easy - the following makes a valid
+expression have addition capabilities in a semantic sense:
+
+<Expression> ::= <Expression> + <Expression>
+
+This statement allows an expression to be made up of two expressions with an
+add symbol between them to be a valid expression.  The same thing can be done
+using subtraction, multiplication, division... all operators.  So long as you
+define Functions which perform what is declared, it wouldn't matter.
+
+We can also have negative values in BNF, so we can inductively create a
+subtraction by adding a negative by using "-<Expression>", looking like so:
+
+<Expression> ::= <Expression> + -<Expression>
+
+If you found it easier, you could use an <Operator> Syntactic Category to store
++, - etc.
+
+Now we need to define the while section of the code, and for this we should
+create a Category called <BooleanExp>.  A common boolean expressions would be
+equality, OR, NOT and greater than.  For ease of use, we will use the
+formatting used in many C-based languages:
+
+<BooleanExp> ::= <Expression> == <Expression>
+<BooleanExp> ::= <Expression> || <Expression>
+<BooleanExp> ::= <Expression> >  <Expression>
+<BooleanExp> ::= !<Expression>
+
+Other concepts, such as AND and Less than, can be generated through
+manipulating the above statements.
+
+** Programming a program
+In order to link the statements together, we need to define a program.  An
+important thing in programs is to do nothing.  If you think of threads waiting
+for a resource, they would have to do nothing in order to wait.  For defining
+'nothing,' this theoretical language will use the term 'skip':
+
+<Program> ::= skip
+
+We also need to define the syntax for assigning variables.  We can use '=' but
+as a nod to Algol, I'll be using ':=' which would look like this:
+
+<Program> ::= <Variable> := <Expression>
+
+We also need to be able to link the statements together, but because each
+statement is a part of the <Program> Category, we can write:
+
+<Program> ::= <Program><Program>
+
+So now the statements can be linked together and it would be valid syntax.
+Whitespace wouldn't matter in this language as we have not explicitly defined
+any use for it, so it will be simply ignored.
+
+** Controlling Flow
+We've successfully defined linking statements and assigning variables, but now
+we need to define the while statement.  You may have noticed that for some
+declarations uses characters not wrapped in Angled Brackets.  An example being
+in Lecture 2 with the function which turns BinaryNumerals into Numbers.
+So for writing the syntax of some conditional statements in BNF, it would be
+written like this:
+
+<Program> ::= if( <BooleanExp> ) { <Program> } else { <Program> }
+<Program> ::= while( <BooleanExp> ) { <Program> }
+
+Now we have defined all the types of statements found in the triangle code at
+the beginning of this chapter.  For the moment, we are not defining the
+Functions but instead go into the theory of Functions, once we've brought all
+the BNF we've written for this chapter together.
+
+** Conclusive section
+<Variable>   ::= <Expression>
+
+<Expression> ::= <Number> | <Variable> | <Expression> + <Expression>
+<Expression> ::= <Expression> + -<Expression>
+
+<BooleanExp> ::= <Expression> == <Expression> | <Expression> || <Expression>
+<BooleanExp> ::= <Expression> >  <Expression> | !<Expression>
+
+<Program> ::= skip | <Variable> := <Expression> | <Program><Program>
+<Program> ::= if( <BooleanExp> ) { <Program> } else { <Program> }
+<Program> ::= while( <BooleanExp> ) { <Program> }
+
+And if you don't like the look of some of the concepts, such as denoting
+equality with '==', then you can write up something which follows BNF and is
+more appealling to you.  So long as you follow BNF and have your Functions
+use the same Categories and syntax, it doesn't matter.
+
+** Sidetrack: Functional Theory
+For programming languages, the names in which we give variables don't really
+mean anything.  We could easily name 'count something different or confusing,
+such as 'x.  Imperative languages often use a table which contains variable
+names and their corresponding values.  These tables are known as 'State
+Tables.'  If we have an example table below, we can look at how functions
+interact with the input/output:
+
+State Table 'S':
+'count  |'sum
+--------+-----
+   3    | 24
+        |
+
+If we have the Function
+⟦'count + 1⟧           (S), then the state table would change the
+           Expression
+value of 'count to be 'count+1, which for this State, would be 4.
+
+So now we've seen how to convert a simple program into Syntactic Categories
+within BNF, and how Imperative Languages use State Tables to store the values
+of variables, making the 'useful' naming of variables arbitrary.
+
+# EOF
