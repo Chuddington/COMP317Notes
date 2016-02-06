@@ -1,5 +1,6 @@
 % Created 2016-02-05 Fri 21:06
 \documentclass[12pt]{article}
+\usepackage[backend=biber]{biblatex}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{fixltx2e}
@@ -15,9 +16,10 @@
 \usepackage{wasysym}
 \usepackage{amssymb}
 \usepackage{hyperref}
+\bibliography{./bib/week1.bib}
 \tolerance=1000
 \date{\today}
-\title{week1}
+\title{COMP317 Notes - Week 1}
 \hypersetup{
   pdfkeywords={},
   pdfsubject={},
@@ -57,25 +59,29 @@ Formal Semantics are often a representation of Mathematical Models.  By
 formally defining these models, it becomes easier to understand both the model
 and semantics in general.  As an example:
 
+\begin{figure}
 \begin{equation}
 F = ma
 \end{equation}
+\caption{Force = Mass x Acceleration}
+\end{figure}
 
-The above example is the equation 'Force = Mass x Acceleration.'  You can make
-this equation sound simpler by saying "If you kick something, it moves.  If you
-kick it harder, it moves further."
+You can make this equation sound simpler by saying "If you kick something, it
+moves.  If you kick it harder, it moves further."
 
 With formal semantics, you can build models (or 'worlds') and then query and
 reason with them in order to understand a particular problem, or syntax.
-
 Semantics comes in three main variants:
 
-Operational : How something is evaluated
-              Example: The method in which the Turing Machine works
-Denotational: What the program is and it's functions (input/output rules)
-              Example: Expressions = Numbers
-Axiomatic   : The logical inferences of the semantics
-              Example: \{ (y + 1) < 0\} x = y + 1
+\begin{itemize}
+  \item Operational : How something is evaluated.
+                    Example: The method in which the Turing Machine works
+  \item Denotational: What the program is and it's functions (input/output 
+                    rules).
+                    Example: Expressions = Numbers
+  \item Axiomatic   : The logical inferences of the semantics.
+                    Example: $$\{ (y + 1) < 0\} x = y + 1$$
+\end{itemize}
 
 Operational Semantics also outline the limits of what computers can do.  As an
 example, it is difficult to test for bugs in recursion.  There currently is no
@@ -86,10 +92,12 @@ way for a machine to verify if there are bugs by outputting "yes" or "no"
 For the purposes of this module, a computer is something which can perform
 algorithms on data structures in the form of programs.  Broken down:
 
-Algorithms     : A sequence of steps (which can modify)\ldots{}
-Data Structures: Things which can store information - numbers, text etc. (in
-                 the form of)\ldots{}
-Programs       : Algorithms which a computer can understand.
+\begin{itemize}
+  \item Algorithms     : A sequence of steps (which can modify)\ldots{}
+  \item Data Structures: Things which can store information - numbers, text etc.
+                         (in the form of)\ldots{}
+  \item Programs       : Algorithms which a computer can understand.
+\end{itemize}
 
 These days we rarely, if ever, write in machine code.  There are multiple
 layers of abstraction which make what is written easier to understand for
@@ -98,15 +106,12 @@ easily understand the syntax, whereas writing in Java or C is considered an
 easier task.
 
 The main changes are only differing syntax and the levels of abstraction
-\begin{itemize}
-\item once compiled/interpreted it makes no difference to a computer as it is
-\end{itemize}
+once compiled/interpreted it makes no difference to a computer as it is
 still modifying memory addresses.  A high voltage could be considered the value
 '1' in binary for a machine, low voltage being '0.'
 
-Taking into account the 'Laws of Thought'
-(\url{https://en.wikipedia.org/wiki/Law_of_thought}), the main thing that differs
-between two programming languages are the semantics/syntax.
+Taking into account the 'Laws of Thought'\cite{wikiLawThought}, the main thing
+that differs between two programming languages are the semantics/syntax.
 
 \subsection{A Quick History Lesson}
 \label{sec-1-5}
@@ -121,13 +126,12 @@ due to the amount of abstraction, but is broken down so that the JVM can
 understand the programs due to the Bytecode.  This is how Java can adopt the
 slogan "Write once, run anywhere."
 
-The 'Church-Turing Thesis'
-(\url{https://en.wikipedia.org/wiki/Church\%E2\%80\%93Turing_thesis}) worked on and
-defined recursive functions and something known as the 'Lambda Calculus'
-(\url{https://en.wikipedia.org/wiki/Lambda_calculus}).  Lambda Calculus played a
-large part in the development of Functional Programming Languages, such as
-Haskell (\url{http://learnyouahaskell.com/}) or LISP, as well as Imperative
-Languages, but was a smaller influence.
+The 'Church-Turing Thesis\cite{wikiChurchTuring}' worked on and
+defined recursive functions and something known as the 'Lambda 
+Calculus\cite{wikiLambdaCalc}'.  Lambda Calculus played a large part in the
+development of Functional Programming Languages, such as
+Haskell\cite{learnYouHaskell} or LISP, as well as Imperative Languages, but was
+a smaller influence.
 
 \subsection{"Hello Maude"}
 \label{sec-1-6}
@@ -164,14 +168,10 @@ metamorphic viruses
 \label{sec-2-1}
 John Backus and Peter Naur developed a way in which to help describe syntax in
 a context-free manner.  This is known as the 'Backus-Normal-Form' or the
-'Backus-Naur-Form' (BNF).  A basic grasp and it's history can be found on the
-relevant wikipedia page
-(\url{https://en.wikipedia.org/wiki/Backus\%E2\%80\%93Naur_Form}).
-
-For easing into semantics without the need of a computer, BNF will be used to
-help describe the semantics of a language.  As this is theoretical, we will be
-defining our own simple language to demonstrate the capabilities of knowing
-semantics and syntax.
+'Backus-Naur-Form' (BNF)\cite{wikiBNF}.  For easing into semantics without the
+need of a computer, BNF will be used to help describe the semantics of a
+language.  As this is theoretical, we will be defining our own simple language
+to demonstrate the capabilities of knowing semantics and syntax.
 
 \subsection{Language crash course}
 \label{sec-2-2}
@@ -194,11 +194,16 @@ particular numerical values - 0 and 1.  These can be strung together to make
 larger numbers by having each 'column' represent a particular base-10 number.
 It goes up in multiples of two, so:
 
+%I AM CURRENTLY HERE IN TERMS OF FORMATTING
+
+\begin{figure}
+
 1101
     $\backslash$
      8 + 4 + 1 = 13
     /
 8421
+\end{figure}
 
 where '1' means that that column is 'true' so should be counted.  That is why
 the above binary's value is 13 and not 15.  We can therefore see  that the
@@ -294,17 +299,17 @@ case there's any confusion.
 
 We can state explicitly that 1101 stands for 13 with the following Function:
 
-⟦1101⟧              = 13
+\textlbrackdbl1101\textrbrackdbl              = 13
       BinaryNumeral
 
 This states that the binary numeral '1101' stands for the base-10 number '13.'
 We can use exhaustive definitions for the functions involving <Digit>s in the
 same manner we did with the Syntactic Category declarations:
 
-⟦1⟧      = 1
+\textlbrackdbl1\textrbrackdbl      = 1
    Digit
 
-⟦0⟧      = 0
+\textlbrackdbl0\textrbrackdbl      = 0
    Digit
 
 Now that the basic definitions have been done for the basic digits, we can now
@@ -313,10 +318,10 @@ this, we can use variable names within the double square brackets.  First we
 define a Digit variable known as 'D' and a Binary Numeral variable known as
 'BN'.  Now we can write the functions:
 
-⟦D⟧              = ⟦D⟧
+\textlbrackdbl D\textrbrackdbl              = \textlbrackdbl D\textrbrackdbl
    BinaryNumeral     Digit
 
-⟦BN D⟧              = ⟦BN⟧             \texttimes{} 2 + ⟦D⟧
+\textlbrackdbl BN D\textrbrackdbl              = \textlbrackdbl BN\textrbrackdbl             \texttimes{} 2 + \textlbrackdbl D\textrbrackdbl
       BinaryNumeral      BinaryNumeral         Digit
 
 The first statement is easy enough to understand - The function transforms a
@@ -328,16 +333,16 @@ Taking the input of a BinaryNumeral and a Digit (such as '1101'), the value
 takes the Digit to one side and doubles the value of the Binary Numeral.  I'm
 finding it difficult to explain so here is the break down:
 
-⟦1101⟧              = ⟦110⟧             \texttimes{} 2 + ⟦1⟧
+\textlbrackdbl1101\textrbrackdbl              = \textlbrackdbl110\textrbrackdbl             \texttimes{} 2 + \textlbrackdbl1\textrbrackdbl
       BinaryNumeral       BinaryNumeral         Digit (6 \texttimes{} 2 + 1) --> 13
 
-⟦110⟧               = ⟦11⟧              \texttimes{} 2 + ⟦0⟧
+\textlbrackdbl110\textrbrackdbl               = \textlbrackdbl11\textrbrackdbl              \texttimes{} 2 + \textlbrackdbl0\textrbrackdbl
       BinaryNumeral      BinaryNumeral          Digit (3 \texttimes{} 2)     --> 6
 
-⟦11⟧                = ⟦1⟧               \texttimes{} 2 + ⟦1⟧
+\textlbrackdbl11\textrbrackdbl                = \textlbrackdbl1\textrbrackdbl               \texttimes{} 2 + \textlbrackdbl1\textrbrackdbl
       BinaryNumeral     BinaryNumeral           Digit (1 \texttimes{} 2 + 1) --> 3
 
-⟦1⟧              = 1
+\textlbrackdbl1\textrbrackdbl              = 1
    Digit
 
 We have now been able to define a language (Binary Numerals) through multiple
@@ -500,7 +505,7 @@ State Table 'S':
 
 
 If we have the Function
-⟦'count + 1⟧           (S), then the state table would change the
+\textlbrackdbl'count + 1\textrbrackdbl           (S), then the state table would change the
            Expression
 value of 'count to be 'count+1, which for this State, would be 4.
 

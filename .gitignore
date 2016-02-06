@@ -46,3 +46,12 @@ Thumbs.db
 *.md~
 *.org~
 *.tex~
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.out
+*.run.xml
+*.toc
+
