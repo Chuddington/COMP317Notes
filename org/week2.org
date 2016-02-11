@@ -1,0 +1,102 @@
+# Note: 'C-c C-e d' compiles this to a LaTeX document automagically in org mode
+# Note: 'C-c C-x C-l' provides in-line representation of LaTeX equations in
+#        org mode, provided you have imagemagick or other image generators
+
+* Lecture 4 - It's one hell of a State
+** Recap from last lecture
+So we've created definitions for our syntactic cateogy known as <Expression>.
+These are:
+
+<Expression> ::= <Numeral> | <Variable> | <Expression> <Operator> <Expression>
+                 !<Expression> | -<Expression> | ...
+# Where you can fill in the various Operators and other personally defined
+# syntax
+
+And this is all well and good, because so long as we follow the semantics we
+have defined, we can have functions which morph the syntactic input into some
+form of output.
+
+We also touched upon State Tables and how they store each variable name, and
+the value for each variable.  Which leads us onto...
+
+** Semantics 1-0-1: Assignment
+Unless otherwise mentioned and updated, the following information will use the
+State Table 'S' which is defined as:
+
+|'x|'y|;z|
+|  |  |  |
+| 0| 3| 4|
+
+So write that down somewhere and keep it for looking back and forth at.  Say we
+have a simple line of code which attaches, or assigns, a number to a variable
+using a second variable as a base:
+
+'x := 'y + 2;
+
+now if you look at the value of 'y in the State Table 'S', we can see that this
+line of code means 3+2 = 5.  We know that this is the answer, but how do we go
+about showing computers that this is the answer from this list of strings?
+
+*** Planet's funniest functions
+We can create a function for <Expression>s which define all possible outcomes
+for any state.  This base rule has the following look:
+
+〚E〛        (S)
+   Expression
+
+Now we know that there is a function to take any Expression with a State, but
+we need to write more functions to help the computer decide what to do with the
+Expression.  Our first definition of an <Expression> is that it can be a
+<Numeral>, so a function which shows this transformation from <Expression> to
+<Numeral> would be:
+
+〚N〛        (S) = 〚N〛      (S)
+   Expression         Numeral
+〚13〛       (S) = 〚13〛     (S) = 13
+   Expression          Numeral
+
+This is a nice simple Function which simply changes the Category of the varible
+from an <Expression> into a <Numeral>.  'N' simply stands for any value which
+can be perceived as a <Numeral> - '13' or '91', for example.  As a formal
+definition: "The integer that results from evaluating Expression N as a
+Numeral."  This is great as we can now use the information from the first
+week's lectures and the first problem sheet to show that it is a valid number
+and that this trail of thought is possible.  Moving onto Variables!
+
+〚V〛        (S) = S(V)
+   Expression
+〚'y〛        (S) = S('y) = 3
+    Expression
+
+Hopefully the above makes a little sense.  What we are doing here is we have
+any variable 'V' as an <Expression> (so it could be 'x, 'y or 'z in our S)
+within the State S, and we transform it to say that we are after the value that
+the 'V' represents.  In the miniature example above, we can see that 'y, in
+it's Expression format, transforms into a 'Table Look-up' of 'y against the
+State S - this is the value of 3.  Now we move onto the operations... addition,
+more specifically.
+
+〚E1 + E2〛        (S)
+         Expression
+〚5 + 7〛          (S)
+        Expression
+
+This is the first function we see that could take a bit of work on our end in
+order to understand.  Everything within the double square brackets is a string,
+so for now at least the computer wouldn't know that they are supposed to add
+5 and 7 together to get 12.  Addition can be formally defined as:
+
+The Result of adding:
+  The result of evaluating Expression E1 in State S (〚5〛        (S) )
+                                                        Expression
+  The result of evaluating Expression E2 in State S (〚7〛        (S) )
+                                                        Expression
+
+This blocky way of formalising what addition means helps us to write the
+output of the function, which is written like so:
+
+〚E1 + E2〛        (S) = 〚E1〛        (S) + 〚E2〛        (S)
+         Expression          Expression         Expression
+
+But wait!
+# I have to get home so am stopping for the moment
