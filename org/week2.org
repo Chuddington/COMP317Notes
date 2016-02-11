@@ -8,7 +8,7 @@ So we've created definitions for our syntactic cateogy known as <Expression>.
 These are:
 
 <Expression> ::= <Numeral> | <Variable> | <Expression> <Operator> <Expression>
-                 !<Expression> | -<Expression> | ...
+<Expression> ::= !<Expression> | -<Expression> | ...
 # Where you can fill in the various Operators and other personally defined
 # syntax
 
@@ -19,11 +19,11 @@ form of output.
 We also touched upon State Tables and how they store each variable name, and
 the value for each variable.  Which leads us onto...
 
-** Semantics 1-0-1: Assignment
+** Semantics 2-0-2: Basic Maths
 Unless otherwise mentioned and updated, the following information will use the
 State Table 'S' which is defined as:
 
-|'x|'y|;z|
+|'x|'y|'z|
 |  |  |  |
 | 0| 3| 4|
 
@@ -36,6 +36,7 @@ using a second variable as a base:
 now if you look at the value of 'y in the State Table 'S', we can see that this
 line of code means 3+2 = 5.  We know that this is the answer, but how do we go
 about showing computers that this is the answer from this list of strings?
+Find out, after the lecture.
 
 *** Planet's funniest functions
 We can create a function for <Expression>s which define all possible outcomes
@@ -97,6 +98,161 @@ output of the function, which is written like so:
 
 〚E1 + E2〛        (S) = 〚E1〛        (S) + 〚E2〛        (S)
          Expression          Expression         Expression
+〚5 + 7〛        (S) = 〚5〛        (S) + 〚7〛         (S)
+       Expression        Expression         Expression
 
-But wait!
-# I have to get home so am stopping for the moment
+But wait!  We can see that the right side is comprised of Functions that we
+have already defined, as E1 and E2 can be considered numerals in this instance.
+As such:
+
+〚E1 + E2〛        (S) = 〚E1〛      (S) + 〚E2〛     (S)
+         Expression          Numeral         Numeral
+〚5 + 7〛        (S) = 〚5〛     (S) + 〚7〛      (S)
+       Expression        Numeral         Numeral
+
+Which will then work out that 5 + 7 is 13.  Notice in the above that we are
+using '+' in our definitions of what the functions do (the right side of the
+equation).  The reason this works is because it is not being read as a
+character like in the input (the "E1 + E2" part), but instead as an operator,
+so the machine can add the results together.
+
+You can implement other operator symbols in the same way.  So long as you are
+using symbols the machine interprets as operations in the function definitions,
+you can technically have any symbol as an input to symbolise this.  As an
+example, you might be aware that the 'modulo' operation is often seen as the
+percentage sign but if added a definition to explain that my modulo sign was
+actually "/~", I would still probably have to use the percentage sign when I
+build my functions, like so:
+
+〚E1 /~ E2〛        (S) = 〚E1〛         (S) % 〚E2〛        (S)
+          Expression         Expression         Expression
+
+It just depends on the compiler or interpreter you use.  I'd take this with a
+pinch of salt though - I could be wrong about this bit.
+
+Performing the negative of <Expression>s is fairly simple.  The function is
+written in a similar manner to this:
+
+〚-E〛        (S) = 0 - 〚E〛        (S)
+    Expression            Expression
+〚-'z〛        (S) = 0 - 〚'z〛        (S) = -4
+     Expression             Expression
+
+To make sense about the above, the numeral 0 has the value of the Expression
+subtracted from it.
+
+*** Sidetrack: Trying out multiple Expressions
+Say that we want to understand what is happening when we try and evaluate this
+line of code:
+
+2 * 'x + 'y;
+
+Depending on how you read this line, the answers would be different.  We have
+the following answers:
+
+(2 * 'x) + 'y = 0 + 3 = 3;
+2 * ('x + 'y) = 2 * 3 = 6;
+
+This could cause confusion if the computer doesn't know in which hierarchy the
+computer should process the expressions.  For now, assume that the largest
+expressions are on the left side.  Here are the functions we arrive at:
+
+# The full expression in all it's unmodified glory
+〚2 * 'x + 'y〛        (S) =
+             Expression
+# We've not officially defined multiplication, but it is visually similar to +
+# Therefore, E1 is the expression on the left side, E2 the 'y variable
+〚2 * x〛          + 〚'y〛         (S) =
+       Expression       Expression
+# E1 has been split to it's two components with the computer knowing you wish
+# to multiply the two expressions together.  E2 is now in the look-up syntax
+〚2〛          X 〚'x〛          + S('y) =
+   Expression       Expression
+# Our syntax earlier has defined that the '2' can be a numeral, so the category
+# has changed.  the 'x variable is now ready for a look-up as well
+〚2〛          X S('x)          + S('y) =
+   Numeral
+# All semantics have been solved by turning the numeral into a number that can
+# be worked with mathematically.  Variable look-ups have been completed, too
+2 X 0 + 3 =
+# Giving the answer:
+3
+
+*** Protection Brackets
+If the sidetrack was read, we had this fairly ambigious maths problem of:
+
+2 * 'x + 'y;
+
+and that it was tricky to understand what answer it wanted.  We can remove this
+confusion through the use of brackets, and we work out the expressions inside
+the brackets first.  So technically we're changing the input to something like
+this:
+
+(2 * 'x) + 'y;
+
+There's just one problem with this though - our semantics haven't defined
+brackets so they currently mean nothing to the language we're building.  This
+is a simple matter if we add to our syntactic category and add a function to
+do stuff with the brackets:
+
+# I didn't wanna write everything in the <Expression> category, so ... will do
+<Expression> ::= ... | ( <Expression> )
+
+〚 (E) 〛        (S) = 〚E〛        (S)
+       Expression        Expression
+
+In the Syntactic Category, it simply adds the capability of <Expression>s being
+contained within brackets - easy enough.  What the function formally does is
+"For any Expression E within brackets for any State S, treat this as an
+Expression E in the State S."  A quick informal breakdown of the statement
+gives this kind of information:
+
+ 2 -> Numeral  -> Expression
+'x -> Variable -> Expression
+'y -> Variable -> Expression
+2 * 'x         -> Expression
+2 * 'x + 'y    -> Expression
+
+*** Could you rephrase the question?
+There can be some ambiguous things in language and grammars.  An example would
+be the above statement we've been going over for a while now.  Without the
+brackets we wouldn't have known what to do.  We could write out a function
+called 'evaluate' that takes an Expression and a State, which could output an
+integer.  It could look like this:
+
+evaluate : Expression x State -> Int
+# for any Expression with any state, the output is an integer
+evaluate(E, S) = 〚E〛         (S)
+                    Expression
+
+The first line has a new look compared to what we have dealt with previously.
+It is an actual function declaration (I may have used this term for functions
+which have the double square brackets and the equals sign).  It tells you the
+name of the function (evaluate), the inputs that the function can take
+(An Expression and a State), then tells you the type of output that will be
+made (an Integer).  For tangentially related reading, I suggest Page 26 from
+this PDF: http://math.uni.lodz.pl/~kowalcr/PPL/HaskellBook.pdf - the syntax is
+mildly different but you can pick up the similarities to make sense of the
+line.  Also I think it's a line of Maude code for a function declaration so
+yeah...  More on that in the near future.
+
+We could also create another function which sorts out the brackets for each
+Expression - we could name this 'Disambiguate':
+
+disambiguate   : Expression -> Expression
+# and then change the meaning of evaluate to include 'disambiguate'
+evaluate(E, S) = 〚disambiguate(E) 〛         (S)
+                                   Expression
+
+Such a function could take an expression that is entirely within brackets, and
+push a part of the expression out, like so:
+
+disambiguate(2 * 'x + 'y) = (2 * x) + 'y
+disambiguate(-'x    + 'y) = (-'x)   + 'y
+
+So for this lecture, we've learnt about how we can create functions to help
+define what we can do with the <Expression>s category - such as Operators,
+defining some form of grouping through brackets in order to help split
+expressions into the layout we want, and dived into how our defined functions
+can be broken down into 'simpler' functions which will provide the answers.
+In short, we're learning to think more like a machine.
