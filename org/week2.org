@@ -256,3 +256,55 @@ defining some form of grouping through brackets in order to help split
 expressions into the layout we want, and dived into how our defined functions
 can be broken down into 'simpler' functions which will provide the answers.
 In short, we're learning to think more like a machine.
+* Lecture 5 - Find the remote; Programme's too long
+Now if we all look back a moment and remember how <Program> was defined in
+Lecture 3, hopefully it looks something similar to this:
+
+<Program> ::= skip | <Variable> := <Expression> | <Program><Program> |
+              if( <BooleanExpression> ) { <Program> } else { <Program> } |
+              while( <BooleanExpression> ) { <Program> }
+
+〚P〛      : State -> State
+   Program
+
+and if it didn't, consider this the template for the next lecture or two.  We
+can see that the program takes a State as input, then outputs a State, from the
+second section.  You can also see some common constructs found in programs -
+skip (which symbolises 'nothing'), Assigning a value to a variable, Linking
+programs together, an if/else clause and a while loop.
+
+This lecture will go through the easier things first and then the last two will
+span through this lecture and the next.
+
+** Nothing is a thing, isn't it?
+The first capability of the <Program> Syntactic Category is the phrase 'skip'.
+This may sound strange to have in a program, this concept of doing nothing, but
+it is fairly important.  If you look at our if statement construct, you must
+have a program in the else statement too, which is no good if you don't want to
+do anything in that section of the clause.  Doing nothing is also used when you
+assign tasks to threads - they can cycle and do nothing until a required
+variable is accessible, or an array is filled before working on the data.  The
+function for creating this desired effect is this:
+
+〚skip〛      (S) = S
+      Program
+
+It's that easy.  If you don't want anything to happen, just return the state
+that was given as input.
+
+** This is something, though
+Now that we have nothing sorted, let's do something about everything else.  The
+assignment operation that was briefly shown to you in these notes under Lecture
+4 has now appeared once more:
+
+State S:
+|'x|'y|'z|
+| 0| 3| 4|
+
+'x := 'y + 2;
+# Any Variable V and any Expression E, within <Program> limits, with any
+# State S
+〚V := E〛      (S)
+        Program
+
+You can split this up into two main parts - how to write the Variable section
