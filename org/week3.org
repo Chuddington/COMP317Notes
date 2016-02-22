@@ -1,0 +1,28 @@
+# Note: 'C-c C-e d' compiles this to a LaTeX document automagically in org mode
+# Note: 'C-c C-x C-l' provides in-line representation of LaTeX equations in
+#        org mode, provided you have imagemagick or other image generators
+
+* Lecture 10 - Game, Set and Maude
+
+Maude can help express semantics by specifying 'sorts' (Syntactic Categories)
+and Operations, which would be things like the phrase 'plus' to define that
+something happens between two Numerals.  In a basic form:
+
+op 0 : -> Num [ctor] .
+op Inc : Num -> Num [ctor] .
+op plus : Num Num -> Num .
+
+The formatting shows the inputs and outputs for each operation.  The first, '0'
+(zero), takes no input and has the output of a 'Num' (Base-10 Number, in this
+instance), making it a constant instead of a variable.  The '[ctor]' defines
+the operation as a 'constructor' as the statement generates data and therefore
+constructs it.
+
+The second statement is the format that will be used for an 'Increment'
+capability.  We can see that there is a Num as an input, and the operation
+creates a Num for an output.  This is also a constructor as it would
+theoretically be able to generate all Numbers recursively.
+
+The third statement is the basic information for implementing addition in
+Maude, accepting two inputs that are a part of the Num category and providing
+a Num as an output.
