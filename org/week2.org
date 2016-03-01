@@ -307,4 +307,114 @@ State S:
 〚V := E〛      (S)
         Program
 
-You can split this up into two main parts - how to write the Variable section
+We will split this up into two main parts - the expression part and what this
+means within the program.  This is for understanding and utilising the concepts
+we go through by just focusing on the Expression.  For the expression
+'V := E,' the output would look like so:
+
+# Output the state S as it is unchanged, except for the variable V, which
+# changes the value to whatever 'n' is.  This is the format that the module
+# will have for such operations.  It may not be 'official' denotation
+S[V <- n]
+
+The following should therefore make sense now we know what the answers should
+look like:
+
+S[V <- n](V) = n
+S[V <- n](X) = S(X)
+
+The first statement makes sense, as we are changing the value of V to whatever
+'n' is - I'll call it 5 for the moment.  So V has it's value changed to 5 then
+we are asking for a table lookup to tell us the value of V - the output will be
+what 'n' is, which is 5.  The second line still changes the value of V to 5,
+but we are asking for a table lookup of the variable 'X.'  We don't directly
+know the value of X as we have not changed it within the current state, so the
+equation is 'S(X)' due to requiring a table lookup.
+
+Now onto the program and it's representation.  Using what was mentioned above,
+we can now state what 〚V := E〛      (S) actually means:
+                              Program
+
+〚V := E〛      (S) = T[V <- 〚E〛         (S) ]
+        Program                 Expression
+
+What this means is that the expression 'V := E' returns the state 'T' where a
+variable 'V' has had it's value changed to whatever the Expression 'E' outputs,
+using the State 'S.'  I've used T to symbolise a different state to 'S' in this
+example - I may forget later down the line so be aware.  It's to help remove
+confusion by giving the target state a different name to other states we use.
+You can use S^1, S^2 or anything else, so long as it makes sense to you and
+does the same thing as on here.  But enough about that - an example!:
+
+State S:
+|'x|'y|'z|
+| 2| 2| 3|
+
+'x := 'y + 1;
+
+# Turn the line of code into the correct format:
+S['x <- 〚'y + 1〛        (S) ]
+                Expression
+# Split the expression into the main parts; implement the addition operator
+S['x <- 〚'y〛        (S) + 〚1〛         (S) ]
+            Expression         Expression
+# Convert 'y into a table lookup; convert '1' into a numeral that can be
+# operated on
+S['x <- S('y) + 1]
+# Perform the lookup on the State Table 'S'
+S['x <- 2 + 1]
+S['x <- 3]
+
+State S (after the operation):
+|'x|'y|'z|
+| 2| 3| 3|
+
+** Linking Programs and the functions that define it
+Now we have defined a variable declaration, we should now write functions which
+allow us to link programs together.  This would be the <Program><Program> part
+found in the <Program> Syntactic Category.  The function to allow linking of
+programs would be this:
+
+# Programs P^1 and P^2 in the state S
+〚P^1 P^2〛     (S) = 〚P^2〛      (〚P^1〛     (S) )
+         Program           Program      Program
+
+So say we have two variable declarations, which can be read as two programs
+linked together.  We will extend the example used in the variable declaration
+section earlier in this lecture:
+
+State S:
+|'x|'y|'z|
+| 2| 2| 3|
+
+'x := 'y + 1;
+'y := 'x * 2;
+
+# Convert the programs into the correct format
+〚'y := 'x * 2〛     (〚'x := 'y + 1〛      (S) ) =
+              Program               Program
+# Expand the first program
+〚'y := 'x * 2〛     (S['x <- S('y) + 1] ) =
+              Program
+# Expand second program; define the 1st program's state change 
+S['x <- S('y) + 1]['y <- 〚2 * 'x〛         ](S['x <- S('y) + 1] ) =
+                                 Expression
+# Expand the Expression.  'y is used instead of 'x in the second square
+# brackets as it would equal what the code is asking --> y = 2('y + 1)
+# We haven't modified 'y yet so it would work.
+S['x <- S('y) + 1]['y <- 2 * S('y) + 2]
+# Simplify each side through table lookups and following the operations
+S['x <- 3]['y <- 6]
+
+So hopefully this all makes sense - we have gone through the steps to
+understand how functions would work for some elements of Programs - noteably
+the capability of waiting, or doing nothing, Variable declarations and Programs
+which take up multiple lines.  The next lecture will include the other main
+concepts - the 'if' statement block and the 'while' statement block.  I know
+this is a fair amount to take in as there's not much explaining and it is
+essentially "Accept this information, you cannot re-word this in any way" but
+hopefully the next few lectures are a little more flexible in it's methods of
+understanding.
+
+* Lecture 6 - While I have your attention
+
