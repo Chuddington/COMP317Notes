@@ -418,3 +418,42 @@ understanding.
 
 * Lecture 6 - While I have your attention
 
+<Program> ::= skip | <Variable> := <Expression> | <Program><Program> |
+              if(<BooleanExpression>) { <Program> } else {<Program>}|
+              while( <BooleanExpression> ) { <Program> }
+
+So if we remember, we still have the if statement and the while loop to do.
+
+** Defining the if/else statement block
+〚if(BooleanExpression) {Program1} else {Program2}〛(S)
+  〚Program1〛(S) if 〚BooleanExpression〛(S) *if BooleanExpression = true*
+  〚Program2〛(S) if not 〚BooleanExpression〛(S) *if BooleanExpression = false*
+
+The first line states what the if statement will look like.  This is simple
+enough.  The second and third line explains what will happen depending on the
+result of the BooleanExpression - Program1 will run if the Boolean turns out to
+be true; Program2 will run otherwise.
+
+** Making an example out of the if statement
+Have a look at this simple if statement block:
+
+'x := -2;
+if('x < 0) {
+  'y := -'x;
+} else {
+  'y := 'x;
+}
+
+We can see that the 'y variable has it's value changed to be the absolute value
+of 'x, as when 'x is lower than 0, it has it's polarity reversed for 'y.
+Written as a function, it takes on the following form:
+
+# Base form
+〚if('x<0){'y:=-'x}else{'y:='x}〛(〚'x:=-2〛(S) )
+# expand / simplify the variable assignment as done in previous lectures
+〚if('x<0){'y:=-'x}else{'y:='x}〛(S['x <- -2] )
+
+# # Evaluate the Boolean Expression
+〚'x < 0〛(S['x <- -2] ) =
+〚'x〛(S['x <- -2] )     =
+S['x <- -2]('x)         = -2
