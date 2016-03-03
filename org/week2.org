@@ -425,7 +425,8 @@ understanding.
 So if we remember, we still have the if statement and the while loop to do.
 
 ** Defining the if/else statement block
-〚if(BooleanExpression) {Program1} else {Program2}〛(S)
+〚if(BooleanExpression) {Program1} else {Program2}〛     (S)
+                                                  Program
   〚Program1〛(S) if 〚BooleanExpression〛(S) *if BooleanExpression = true*
   〚Program2〛(S) if not 〚BooleanExpression〛(S) *if BooleanExpression = false*
 
@@ -434,7 +435,7 @@ enough.  The second and third line explains what will happen depending on the
 result of the BooleanExpression - Program1 will run if the Boolean turns out to
 be true; Program2 will run otherwise.
 
-** Making an example out of the if statement
+*** Making an example out of the if statement
 Have a look at this simple if statement block:
 
 'x := -2;
@@ -449,11 +450,151 @@ of 'x, as when 'x is lower than 0, it has it's polarity reversed for 'y.
 Written as a function, it takes on the following form:
 
 # Base form
-〚if('x<0){'y:=-'x}else{'y:='x}〛(〚'x:=-2〛(S) )
+〚if('x<0){'y:=-'x}else{'y:='x} 〛     (〚'x:=-2〛(S) )
+                                Program
 # expand / simplify the variable assignment as done in previous lectures
-〚if('x<0){'y:=-'x}else{'y:='x}〛(S['x <- -2] )
+〚if('x<0){'y:=-'x}else{'y:='x} 〛(S['x <- -2] )
 
-# # Evaluate the Boolean Expression
+# # Evaluate the Boolean Expression by obtaining the value of 'x
 〚'x < 0〛(S['x <- -2] ) =
 〚'x〛(S['x <- -2] )     =
 S['x <- -2]('x)         = -2
+
+# Evaluate the first block of the if statemens, as BooleanExpression = true
+〚'y := -'x〛(S['x <- -2] ) =
+# Add brackets to S to include the 'y variable as you are changing the value
+S['x <- -2]['y <- 〚-'x〛(S['x <- -2] ) ] =
+# Steps aren't included but you know how changing a variable works
+S['x <- -2]['y <- 2]
+
+So hopefully this all makes sense - you break down the BooleanExpression by
+obtaining any values from variables, then you break the required program down;
+in this case it would be Program1.
+
+As I have broken down the statement into multiple parts, I wouldn't blame you
+if you were confused about how the part 'S('x <- -2)' is available in all of
+the various parts.  How I understand it is that everything is a string, so can
+be mixed and matched.  As the phrase is what the current state is (due to the
+variable assignment before the if statement), you are able to carry it over for
+each particular section, as the state hasn't changed (whilst checking the 
+Boolean Expression, for example).
+
+** Defining a while loop
+<Program> ::= while( <BooleanExpression> ) { <Program> }
+# For any Boolean Expression 'B' and any Program 'P' in the State 'S'
+〚while(B) {P}〛(S)
+
+# If the boolean expression is true  --> 
+if     〚B〛(S) --> 〚while(B) {P} 〛(〚P〛(S) )
+# If the boolean expression is false -->
+if not 〚B〛(S) --> S
+
+Above is the basic semantics of the while loop.  I have defined how a while
+loop looks within this programming language as 'while(B) {P}'.  This is a
+similar look to C-based languages so hopefully it's familiar to you.  If the
+boolean expression is false, then the state is returned, unaltered - in the 
+same way that the 'skip' command simply returned the state.
+
+When the boolean expression is true, it gets a little bit trickier.  While
+loops run the block of code within the curly braces and then check if the
+expression is true again - essentially going back to the beginning.  To achieve
+this, the function would be to call the while block again with the same
+boolean expression and program, but with a state which has been modified by
+whatever the Program plans to do with the original state.  This is the reason
+that there is a '〚P〛' within the first set of brackets - to show that the 
+state 'S' has been modified by the Program 'P'
+
+*** How-To:  Building a nest(ed while loop)
+'x := 0;
+while('x < 2) {
+  'x := 'x + 1;
+}
+
+The above code is a nice simple example of a while loop in action.  Hopefully
+what you're getting out of it is that whenever 'x is lower than 2, increase
+it's value by 1.  This would make the while loop run twice, as 2 is not lower
+than 2.  Written as a function:
+
+# The state this time the state is named 'T' purely to show that you can have a
+# different letter define the state.  Mainly it will be 'S' though so don't
+# worry too much if it is a curveball for you
+〚'x := 0; while('x < 2) {'x := 'x + 1;} 〛(T) =
+# move the variable assignment into the state as a function, then simplify
+         〚while('x < 2) {'x := 'x + 1;} 〛(〚'x := 0〛(T) ) =
+                                           (T['x <- 0])
+# check the boolean expression, then follow through with the increment of 'x
+# Note that state changes are read left to right, so 'x becoming 1 would
+# overwrite any older value, as shown below
+〚while('x < 2) {'x := 'x + 1;} 〛(〚'x := 'x + 1〛(T['x <- 0] ) ) =
+                                  (T['x <- 0]['x <- 1] )
+                                  (T['x <- 1] )
+
+〚while('x < 2) {'x := 'x + 1;} 〛(〚'x := 'x + 1〛(T['x <- 1] ) ) =
+                                  (T['x <- 1]['x <- 2] )
+                                  (T['x <- 2] )
+~End of loop. Return T['x <- 2]~
+
+If you find it easier whilst breaking down the semantics, you can create
+intermediate State Variables and then use them in the future steps.  Here is
+the above example using such a method (although I don't know if it would be
+deemed correct):
+
+〚while('x < 2) {'x := 'x + 1;} 〛(〚'x := 0〛(T) ) =
+                              U = (T['x <- 0])
+
+〚while('x < 2) {'x := 'x + 1;} 〛(〚'x := 'x + 1〛(U) ) =
+                              V = (U['x <- 1] )
+
+〚while('x < 2) {'x := 'x + 1;} 〛(〚'x := 'x + 1〛(V) ) =
+                              W = (V['x <- 2] )
+~End of loop.  Return W~
+
+*** Infinite loops
+We've worked with condition-based programs, such as the if statement and the
+while loop.  But when it comes to looping programs, it is important to be aware
+about those that would loop infinitely.  Something such as:
+
+〚while(true) {skip} 〛(S) =
+〚while(true) {skip} 〛(〚skip〛S) =
+...
+
+** Partial Functionality
+f(x) = 1 / x;
+
+The above line states that a function called 'f' takes an input known as 'x'
+and then outputs the inverse of x.  It's essentially x^-1.  This function is
+known as a 'partial function' as there are some values for 'x' which would
+break the function.  0 (zero) as the value for 'x' would be the proof required
+to show that the function is only partial, as you cannot divide by 0.
+
+As a formal definition, a partial function is a function which has at least one
+output which would not be defined (Not available within the state).
+
+When writing functions, you want to aim for 'total' functions - those that will
+work for any valid input.  You may now have noticed that we have been writing
+total functions for a fair amount of time now as they take 'an amount' of
+inputs and produces 'an amount' of outputs.  Here are a couple of examples:
+
+# The template which functions follow
+f : A -> B
+# The Program functions we have been writing within this file
+〚P〛       : State -> State
+   Program
+# The Expression functions we were writing at some point in the past
+〚E〛          : State -> Integer
+   Expression
+
+* Defining what we've done so far
+We have managed to perform inductive definitions of some Total as well as some
+Partial Functions.  By defining the <Expression> and <Program> Syntactic
+Categories, we now have Turing-Complete mechanics for our programming language,
+with the Syntax and Semantics in BNF.
+
+We will eventually extend this language of ours with more functionality.  You
+can add some functionality yourself in your spare time if you wish - if for
+nothing else, it can help improve your understanding of what has been currently
+covered
+
+Being able to use BNF and writing functions to extend a language's capabilities
+is important - It will be in the exam (if you're someone actually taking this
+module).
