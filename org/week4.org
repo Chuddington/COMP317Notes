@@ -26,3 +26,11 @@ theoretically be able to generate all Numbers recursively.
 The third statement is the basic information for implementing addition in
 Maude, accepting two inputs that are a part of the Num category and providing
 a Num as an output.
+
+** Inductive definitions and Terms
+Within the information above, we have a couple of terms.  Here is what we can
+work out so far:
+
+'0' is a term as it is a constant.
+if 'T' is a term within sort 'Num,' then Inc(T) would be a term too
+
