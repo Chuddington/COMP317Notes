@@ -21,16 +21,37 @@ constructs it.
 The second statement is the format that will be used for an 'Increment'
 capability.  We can see that there is a Num as an input, and the operation
 creates a Num for an output.  This is also a constructor as it would
-theoretically be able to generate all Numbers recursively.
+theoretically be able to generate all Numbers recursively.  If you have notes
+made from the lectures, Inc(X) would be the same as 'Succ(X).'  I just prefer
+the word 'Increment' as it is similar to other programming languages.
 
 The third statement is the basic information for implementing addition in
 Maude, accepting two inputs that are a part of the Num category and providing
 a Num as an output.
+
+The term '[ctor]' stands for 'Constructor' in Maude.  This flags the operation
+as required for the sort as it forms the basis of other operations.
+Essentially, most constants will be a constructor because they are used to
+build sub-terms.  'Inc' is also a constructor as it will be used to build the
+list of numbers by nesting Inc statements, like so:
+
+Inc(Inc(Inc(0) ) ) == '3'
 
 ** Inductive definitions and Terms
 Within the information above, we have a couple of terms.  Here is what we can
 work out so far:
 
 '0' is a term as it is a constant.
-if 'T' is a term within sort 'Num,' then Inc(T) would be a term too
+If 'T' is a term within sort 'Num,' then Inc(T) would be a term too.
+If 'T1' and 'T2' are terms, then plus(T1, T2) is a term too.
 
+We can see that because Inc(T) and plus(T1, T2) are built from other terms,
+they are known as 'sub-terms.'
+
+** Defining Stacks
+sorts Bool Stack
+ops true false : -> Bool [ctor] .
+op empty : -> Stack [ctor] .
+op not   : Bool -> Bool .
+# 'not' can be applied recursively:  not(not(true) ) == true
+op push  : Bool Stack -> Stack [ctor] .
