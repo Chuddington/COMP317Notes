@@ -48,10 +48,29 @@ If 'T1' and 'T2' are terms, then plus(T1, T2) is a term too.
 We can see that because Inc(T) and plus(T1, T2) are built from other terms,
 they are known as 'sub-terms.'
 
-** Defining Stacks
-sorts Bool Stack
+** Maude is stacked
+sorts Bool Stack .
 ops true false : -> Bool [ctor] .
 op empty : -> Stack [ctor] .
 op not   : Bool -> Bool .
 # 'not' can be applied recursively:  not(not(true) ) == true
 op push  : Bool Stack -> Stack [ctor] .
+# Examples include: 'push(true, empty)' and 'push(false, push(true, empty) )'
+op pop   : Stack -> Stack .
+# 'pop(push(false, empty) )'
+eq pop(push(B, S) ) = S .
+
+The above code probably isn't correct, but you can at least see how a Stack may
+be implemented in Maude.  There is a constant to define a stack, known as
+'empty,' there is a 'not' operation to flip the value of a Boolean and the two
+functions 'pop' and 'push' which remove an element from the stack or add an
+element, respectively.  There is an equation to make make computation faster
+for the case of pop(push(B, S) ).
+
+As a very basic outline, Maude allows us to give names for concepts (such as an
+empty stack) as well as operations (pop() and push() ).
+
+** Maude vs. John Hancock
+Within Maude, we are able to write a list of 'Sorts' (such as Stack, or Num) as
+as well a list of Operations(Inc() and plus(), for example).  This gives us
+something known as a 'Maude Signature.'  
