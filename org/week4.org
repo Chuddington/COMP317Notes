@@ -73,4 +73,79 @@ empty stack) as well as operations (pop() and push() ).
 ** Maude vs. John Hancock
 Within Maude, we are able to write a list of 'Sorts' (such as Stack, or Num) as
 as well a list of Operations(Inc() and plus(), for example).  This gives us
-something known as a 'Maude Signature.'  
+something known as a 'Maude Signature.'  Written a little more formally, a
+Maude Specification (Signature) gives:
+
+(S, O) where:
+S = A set of Sort Names, and
+# {Num}; {Bool, Stack}
+O = A set of Operation Names, and their input/output types
+
+We can split the various types found within a Maude Specification into
+'families' which are essentially all things which have the same input/output
+types.  This is formalised with the form 'O    for w ∈ S, s ∈ S'
+                                           w,s
+
+So if we are to analyse the 'Num' sort, we would have this:
+
+# All operations with nothing as an input and a Num as an output
+O         = {0}
+ [ ], Num
+
+# All operations with a Num as an input and a Num as an output
+# Note that 'inc' and 'succ' will do the same thing, but that is not required
+# for them to be in a family together
+O         = {Inc, Succ}
+ Num, Num
+
+# All operations with two Num's as an input and a Num as an output
+# We have not specifically defined 'mult' and 'divi' but you can fairly easily
+# guess how to using the semantics of 'plus' as a template
+O             = {plus, mult, divi}
+ Num Num, Num
+
+# For any other amount of inputs, with a Num as an output, make it an empty set
+O       = { }
+ w, Num
+
+
+We can do the same thing for the Stack sort too - it's constants will help
+explain that even though values can be part of the same family, they do not
+have to equal the same thing (true and false, for instance):
+
+O           = {True, False}
+ [ ], Bool
+
+O           = {Empty}
+ [ ], Stack
+
+O           = {Not}
+ Bool, Bool
+
+O                  = {push}
+ Bool Stack, Stack
+
+O             = {pop}
+ Stack, Stack
+
+# All other inputs and outputs
+O     = { }
+ w, s
+
+
+** Formalising Signatures
+Within this module, the icon which will tell us that we are talking about a
+signature will be 'sigma' (Σ).  Therefore, if we use our current knowledge from
+before, Σ = (S, O).  In order to properly define a signature, we need to fill
+in all of the available terms into the format that is seen above, which follows
+'o ∈ O    '  (o exists within O    )
+       w,s                      w,s
+
+We define the terms of sort S ( (T )s ) for a couple of cases:
+                                  Σ
+
+'o ∈ O      ' (Constants within the sort)
+       [ ],s
+
+'o ∈ (T  )s   (True ∈ (T  )bool)
+                         Σ
