@@ -147,5 +147,142 @@ We define the terms of sort S ( (T )s ) for a couple of cases:
 'o ∈ O      ' (Constants within the sort)
        [ ],s
 
-'o ∈ (T  )s   (True ∈ (T  )bool)
-                         Σ
+'o ∈ (T  )s ' (Terms with only one input)
+        Σ
+
+'o ∈ O      ' (Terms with multiple inputs where w = (s1, s2, ..., sN) )
+       w,s
+    Term 'Ti' ∈ (T  )si (where i = (i = 1, 2, ..., N) )
+                   Σ
+# As an example of multiple terms, the term 'push(true, empty)' must be valid
+#   within the 'Stack' sort (and it is) as 'push' takes a bool and a stack
+#   which outputs a stack.  As 'true' and 'empty' are valid terms in 'bool' and
+#   'stack' respectively, 'push(true, empty)' is a valid 'stack.'
+
+* Lecture 11 - Maude Lists
+So from what we can gather, A Maude Specification is a:
+
+List of Terms (and)
+Signature(s) (List of Operations)
+
+** A basic list in Maude
+sort List
+op empty  :          -> List
+op add    : Num List -> List
+op length :     List -> Num
+
+The signature for the above would be:
+
+S = {List, Num}
+
+O         = {0}
+ [ ], Num
+
+O         = {empty}
+ [ ], List
+
+O         = {succ}
+ Num, Num
+
+O              = {add}
+ Num List, List
+
+O         = {length}
+ List, Num
+
+O            = {plus}
+ Num Num, Num
+
+O   = { }
+ w,s
+
+And this is all well and good.  We should also remember that a Signature is a
+list of 'Sort Names' (List and Num, in the above example) and a list of
+Operations (0, empty, add, length, plus and succ - in the above example).
+These signatures are written in short-hand as the 'sigma' symbol (Σ).
+Signatures are for defining all possible implementations of the 'Abstract
+Datatypes' (ADT).  Any potential implementation is known as a 'Σ-Model' or
+'Σ-Algebra.'  These models are simply a family of sets which conform to the
+signature.  With this in mind:
+
+Ms -> (For each sort in the Model (s ∈ S) )
+  M     || M
+   Num      List
+# The asterisk below denotes an array of elements that are sort 'Num'
+  M     = M   *
+   List    Num
+
+These models can also be known as 'Carrier Sets' for 'S.'  They provide a
+concrete representation of the signatures involved (an example could be 32-bit
+numbers in a different programming language).
+
+** Models and potential representations
+The interesting (and probably confusing) thing about defining a Σ-Model is that
+so long as the input is 'valid' and follows the signature's guidelines, it is a
+correct representation.  As an example for how confusing it can be, it would
+make sense that the operation '0' within the sort 'Num' would equal to the
+actual number zero.  We could, however, write the function linked with this
+operation to state that the value is actually '23' and it would still be valid
+according to the operation as '23' is part of the sort 'Num.'
+
+Another example would be defining the empty set of a List as the value
+'{2, 3, 7}' instead of simply '{ }' and as it is still a List, it would work,
+although not as normal people would expect.
+
+** Formalising Models
+For any Signature (Σ = (S, O) ), there is at least one Σ-Model which can
+satisfy all of the requirements.  A valid Σ-Model will be written in the form
+'T '.  To explain this in a simpler manner:
+  Σ
+
+(T )  ==> The set of terms within sort 'S'
+  Σ S
+
+(T )  = o ∈ (T )    ('o' must be within the model - this is usually constants)
+  Σ o         Σ S
+# An example being (T )      = empty
+#                    Σ empty
+
+(T )                =
+  Σ w1 w2 ... wN, S
+
+(T ) (T )   x (T )   x ... x (T )   -> (T )
+  Σ    Σ w1     Σ w2           Σ wN      Σ S
+# Each of the inputs must be able to be linked into the final output
+
+The final statement in the above can be written as a function, like so:
+
+(T ) (w1, w2, ..., wN) = O(w1, w2, ..., wN)
+  Σ O
+# An example of this in action would be (T )   (5, 3) = add(5, 3) = 8
+#                                         Σ add
+
+** Lazy Programming
+One of the ways to test whether a model works can be to use the
+"Lazy Programmer's Model."  This is a model where the value for each term is
+zero.  This is because the 'LPM' has only one term - 'zero.'  As an example:
+
+'For any Signature Σ = (S, O):'
+  For any s ∈ S(LP ) = 0
+                  Σ s
+  For o ∈ O      (LP ) = 0
+           [ ], S   Σ o
+  For o ∈ O            (LP ) (t1, ..., tN) = 0
+           t1 ... tN, S   Σ o
+    t ∈ (LP )  = {0}
+     N     Σ Si
+    # 'Si' stands for any intermediate State that the program is in whilst
+    # working through the multitude of inputs found in 'tN'
+
+** Lecture Overview
+Hopefully we are aware that there are concepts known as 'Signatures' which help
+define the look of a program by stating the operation's required inputs and
+outputs ('plus' requires two 'Num' inputs and provides one 'Num' output, for
+instance).  We have also gone through defining a Σ-Model by the data that is
+within each family of inputs/outputs ('plus', 'mult' and 'divi' all take two
+Num inputs and provide one Num output), as well as formalising what is required
+in order to make a complete Σ-Model (by using (TΣ)S to help outline the terms
+and what families they are in) as well as the potential representations and the
+viable confusion we may have if the language's creator decides to play a sick
+joke and make 'empty' lists/sets have values in to begin with or make '0'
+actually mean 13, or something.
