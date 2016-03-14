@@ -1,0 +1,125 @@
+# Note: 'C-c C-e d' compiles this to a LaTeX document automagically in org mode
+# Note: 'C-c C-x C-l' provides in-line representation of LaTeX equations in
+#        org mode, provided you have imagemagick or other image generators
+
+* Lecture 14 - Equations, Processing and Computation
+Say we have a function, known as 'f' which takes one parameter, like so:
+
+f(x) = 2x^2 + x + 1
+
+We could also have another function, known as 'g' which will also take
+a single parameter:
+
+g(0)
+g(succ(0) ) = g(1)
+
+** Patterns and Plus'ing
+We can see that there is a pattern (and they are known as 'patterns' too) in
+the way that we write these functions.  Many functions within Maude are built
+from such patterns, using ctors (Constructors) and Variables.  Now that we know
+the generic look of such things, we can write some information for the 'plus'
+function that we have come across in previous lectures:
+
+eq plus(0, N) = N .
+eq plus(succ(M), N) = plus(M, succ(N) ) .
+
+With our basic knowledge of numbers, the above statements make sense -
+'0 + 3 = 3' and '1 + 3 = 0 + 4 = 4'.
+
+** State tables
+There are tables that store the variables and their values, in a similar manner
+to State Tables.  This table is a part of the 'Σ-Model' (T  ) which when
+                                                        Σ
+written:
+
+{M, N} -> T      (M and N are a part of the Σ-Model)
+           Σ
+
+** Matches
+Remember when we had written families of similar operations within the Σ-Model?
+Writing these correctly are known as a 'Match' as they are valid for the inputs
+and outputs required (i.e. they 'match').  So as an example:
+
+X         = {M, N}
+ [ ], Num
+
+In the above statement, 'X' stands for a Signature of variables, the left and
+the right side of related equations (X, ℓ, r).  with that in mind:
+
+f . X -> T
+          Σ
+
+# For a family of functions:
+fs . X       -> (T )
+      [ ], S      Σ S
+
+eg: f(M) = succ(0)
+    f(N) = succ(succ(0) )
+# Functions are linked with a term
+
+As a simpler way of understanding what Matches are, they are functions which
+are bound to terms.  If this is a little confusing, read up on the programming
+language Haskell - almost every value is technically a function within that
+language.  Even variables and the numbers/strings that they are assigned.
+
+
+** Terms and their evaluations
+A Term (usually known as 't') is the result of the function when you replace
+variable 'X' with the function f(X) for the left side of the function (ℓ).
+
+In a similar manner to defining Σ-Models, we deal with writing and evaluating
+functions in the same way:
+
+Given f . X -> T :
+                Σ
+  hf(c) = c  (For any Constant 'c', c ∈ O      )
+                                         [ ], S
+  hf(X) = f(X)  (For x ∈ X      )
+                          [ ], S
+  hf(O(t1, ..., tN) ) = o ∈ (hf(t1), ..., hf(tN) )  (for o ∈ O            )
+                                                              t1 ... tN, S
+
+So by playing with the information above on the following example:
+
+M = succ(0)
+N = succ(succ(0) )
+
+# Move the functions onto the variables
+hf(plus(succ(M), N) ) =
+plus(hf(succ(M) ), hf(N) ) =
+# now that the function is on 'N' - parse the value from it
+plus(succ(hf(M) ), succ(succ(0) ) ) =
+# now that the function is on 'M' = parse the value from it
+plus(succ(succ(0) ), succ(succ(0) ) ) =
+#        |  M   |   |      N      |
+plus(2, 2) = 4
+
+*** Sidetrack: A variant on the plus function
+The example above was to do with binding functions to terms.  This is nice and
+all but how about an example using the following definition of 'plus:'
+
+# We can see that the line below would still be technically correct
+plus(succ(M), N) = succ(plus(M, N) ) .
+
+M = succ(0)
+N = succ(succ(0) )
+
+hf(succ(plus(M, N) ) ) =
+# | right hand side |
+succ(hf(plus(M, N) ) ) =
+succ(plus(hf(M), hf(N) ) ) =
+succ(plus(succ(0), succ(succ(0) ) ) ) =
+#        |  M   | |      N      |
+# as you can see, the above just before 'M' follows the format of the
+# definition given to begin with, so 'succ' and 'plus' are swapped around
+succ(succ(plus(0, succ(succ(0) ) ) ) ) =
+#            |M| |       N     |
+# 'M' changes it's value due to the function given at the beginning of the
+# example
+succ(succ(plus(0, 2) ) ) =
+succ(succ(2) ) = 4
+
+** Term Re-writing
+Term Re-writing means to (usually) simplify one term into an equivalent, easier
+to break down term.  If you are familiar with programming definitions, this
+would be the same as 're-factoring code.'
