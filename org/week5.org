@@ -123,3 +123,80 @@ succ(succ(2) ) = 4
 Term Re-writing means to (usually) simplify one term into an equivalent, easier
 to break down term.  If you are familiar with programming definitions, this
 would be the same as 're-factoring code.'
+
+t1 -> t2  
+# t1 rewrites (simplifies) to t2
+
+t1 = hf(ℓ) && t2 = hf(r)
+# t1 equals a function applied to the left  hand side of an equation
+# t2 equals a function applied to the right hand side of an equation
+# This uses (X, ℓ, r) for 'f : X -> T '
+#                                    Σ
+
+succ(t1) -> succ(t2)
+succ(succ(t1) ) -> succ(succ(t2) )
+
+If you are familiar with basic algebra and simplifying algebraic statements,
+term re-writing is much of the same thing
+
+** Using context as a way of simplification
+If we think of pretty much everything as terms (similar to how we can think of
+programs as a list of strings) and as everything as a Work In Progress until
+the calculations and evaluations are complete, 'context' can provide us with a
+little help by using it as a milestone, or waypoint, during our calculations.
+
+Context is simply a term within a Σ-Model which has some part which is unknown
+to us.  Written formally:
+
+c ∈ T ( {_} )
+     Σ
+
+*** Sub-Terming using Context
+t1 = C[hf(ℓ) ]
+t2 = C[hf(r) ]
+# t1 is a function applied to the left hand side of an equation, placed into
+# context.  t2 is the same but for the right hand side of an equation.
+
+C = succ(_)
+
+t1 = plus(succ(0), succ(succ(0) ) )
+t2 = succ(succ(succ(0) ) )
+# t1 and t2 would equal the same thing if you work it out without going into
+# the depths of the semantics - (1 + 2) = 3
+
+# Using the context, we can see that 'M' would equal '0' as it successfully
+# fills the underscore section of the context.  'N' is 'succ(0)' through the
+# same reasoning.  xf(x) for this part would be the un-modified version, to
+# show the changes that f(x) implies
+xf(M) = succ(0)
+f(M)  = 0
+xf(N) = succ(succ(0) )
+f(N)  = succ(0)
+
+# We can then change the context to go a level 'deeper' so that we can continue
+# evaluating the statement
+c = succ(succ(_) )
+
+t1 = plus(0, succ(0) )
+xf(N) = succ(0)
+f(N) = 0
+
+# Now that we have the amount of levels that are within the variables 'M' and
+# 'N' (1 and 2, respectively), we can join M and N together and remove the
+# 'plus'
+
+succ(succ(succ(0) ) )
+plus(succ(0), succ(succ(0) ) ) == succ(succ(succ(0) ) )
+# and therefore t1 can be re-written as t2
+t1 -> t2
+
+
+This may seem confusing and that's okay.  What we've managed to do is show that
+the left hand side of the equation (t1 = plus(succ(0), succ(succ(0) ) ) ) is
+semantically the same as the right hand side of the equation
+(t2 = succ(succ(succ(0) ) ) ) by using context to measure the amount of times
+that the command 'succ()' appears.  This technique is similar to substitution
+that is taught in High School, so maybe look at simplifying fractions and
+algebraic statements to get a feel for how using context works.
+
+* Lecture 15 - We Deno. Now
