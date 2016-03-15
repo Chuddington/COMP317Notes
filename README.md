@@ -29,11 +29,19 @@ your GUI will inform you if your copy is out of date.
 2. You can download an archive of the repository near the top-right of the
 directory explorer thing whilst on the repository.  If you can't find it,
 [don't despair:](https://github.com/Chuddington/COMP317Notes/archive/master.zip)
-I will at some point (if I find out how) make snapshots which only include when
-I have finished a week's worth of notes, instead of people downloading
-half-finished files.
+It will be the most recent version of what has been created, for those that
+like your information to be as 'bleeding edge' as it can be.
 
-3. You can view it online.  If you do, it is best that you view the .org files
+3. I have now made tags for when a week's worth of notes has been written up.
+You'll find them in the 'releases' section.  The versioning system will be
+'0.X' where X = the week's notes that have been completed in .org files.  Once
+all of the notes have been written up, the versioning will move onto '1.X'
+with X standing for the same thing but for .tex files.  Finally, version
+'2.0' will be when a PDF file for all weeks hava been compiled from the .tex
+files, as it doesn't make sense for me to make sub-versions for me just
+compiling the .tex files.
+
+4. You can view it online.  If you do, it is best that you view the .org files
 in their 'raw' form - whilst github knows the basics of formatting .org files,
 it does not account for some of the quirks I have in showing the information
 more easily for those using simple text editors.  As such, some of the examples
