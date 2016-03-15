@@ -10,6 +10,36 @@ information into .tex files to compile the info into PDF.  Links to the
 [Module Overview](https://www.csc.liv.ac.uk/teaching/modules/module.php?code=comp317)
 and the [Main page](http://cgi.csc.liv.ac.uk/~grant/Teaching/COMP317/).
 
+EDIT: This seems to be a lie and slightly ambitious but I'll get around to
+writing the notes up as and when I can, I promise.  As of 15/03/2016 I'm about
+6 lectures (2 weeks) behind.
+
+## Accessing this Information
+You can obtain this repository's information in a variety of different ways:
+
+1. If you have 'git' installed, you can use the command
+'git clone https://github.com/Chuddington/COMP317Notes.git' to create a copy
+of the 'COMP317Notes' folder (Base Directory) where your command 
+prompt/terminal currently is.  If you are using a GUI client for git, such as
+'Git for Windows,' you can use the clone option and copy the link in the box it
+provides and it will download it just the same.  The command 'git pull' when
+within the 'COMP317Notes' folder will update your local copy if required, or
+your GUI will inform you if your copy is out of date.
+
+2. You can download an archive of the repository near the top-right of the
+directory explorer thing whilst on the repository.  If you can't find it,
+[don't despair:](https://github.com/Chuddington/COMP317Notes/archive/master.zip)
+I will at some point (if I find out how) make snapshots which only include when
+I have finished a week's worth of notes, instead of people downloading
+half-finished files.
+
+3. You can view it online.  If you do, it is best that you view the .org files
+in their 'raw' form - whilst github knows the basics of formatting .org files,
+it does not account for some of the quirks I have in showing the information
+more easily for those using simple text editors.  As such, some of the examples
+which use sub-scripting may show up incorrectly and will attach the subscript
+sections to the end of the above lines, instead of keeping the formatting.
+
 ## File Types
 ### Org
 If you have [Emacs](https://www.gnu.org/software/emacs/#Obtaining), .org files 
@@ -17,7 +47,8 @@ will probably be your favoured method of reading the information, due to it's
 LaTeX math mode capabilities and it's ability to grow/shrink topics.  Of
 course, if you have another editor that is capable of reading .org files with
 all of it's features (if such a thing exists), then by all means use that.  
-.org files are simple files otherwise and can be read in most text editors.
+.org files are simple files otherwise and can be read in most text editors just
+like a plain .txt file.
 
 ### PDF
 If you want to read the information on something a little more portable than a
