@@ -29,7 +29,7 @@ With our basic knowledge of numbers, the above statements make sense -
 ** State tables
 There are tables that store the variables and their values, in a similar manner
 to State Tables.  This table is a part of the 'Σ-Model' (T  ) which when
-                                                        Σ
+                                                          Σ
 written:
 
 {M, N} -> T      (M and N are a part of the Σ-Model)
@@ -200,3 +200,61 @@ that is taught in High School, so maybe look at simplifying fractions and
 algebraic statements to get a feel for how using context works.
 
 * Lecture 15 - We Deno. Now
+As a quick overview - a Maude Specification without any equations are known as
+T , and possible implementations of a Specification are known as Σ-Models.
+ Σ
+
+# A basic Maude Specification for a datatype 'Num':
+sort Num
+op 0 : -> Num
+op succ : Num -> Num
+op _+_ : Num Num -> Num
+
+Σ-Models are filled when you complete what happens when you code what happens
+for all constants and for all operations that use Variables.  As a formality:
+
+Σ-Model: for each s ∈ S:
+  a set 'As'
+  for constants (c ∈ O      ):
+                      [ ], S
+    Ac ∈ As
+  for when variables are used as input (o ∈ O             ):
+                                              s1 ... sN, S
+    Ao : As1 x As2 x ... x AsN -> As
+
+** Testing Implementations (Σ-Models)
+Say that we have three different interpretations of the 'Num' sort as written
+above (I'll use A for the first model, and B for the second and C for the
+third):
+
+A          = {0, 1, 2, ...}  B          = {true, false}
+ Num                          Num
+A          = 0               B          = true
+ 0                            0
+A    (x)   = x + 1           B    (x)   = !x
+ Succ                         Succ
+A   (x, y) = x + y           B   (x, y) = x && y
+ _+_                          _+_
+
+
+C          = B
+ Num          Num
+C          = B
+ 0            0
+C    (x)   = x
+ Succ
+C   (x, y) = x || y
+ _+_
+
+
+So we can see the three interpretations and the data available for each - two
+implementations use Boolean values (B and C) and one actually uses numerical
+values (Imp. A).  The thing about interpretations is that so long as the
+information is valid, it can be as confusing as you want it to be - such as
+using what are usually boolean values for a Number-based sort.  Say for example
+we have a couple of equations which we are already familiar with for the Num
+dataype:
+
+0 + N = N
+succ(M) + N = M + succ(N)
+
