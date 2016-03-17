@@ -258,3 +258,13 @@ dataype:
 0 + N = N
 succ(M) + N = M + succ(N)
 
+We can use Truth Tables to validate the various different inputs available to
+us for each interpretation.  As a basic example:
+
+|N    |true && N|true OR N|
+|-----+---------+---------|
+|true |  true   |  true   |
+|false|  false  |  true   |
+|-----+---------+---------|
+
+We can see above that the value for 
