@@ -2,17 +2,30 @@
 Notes for the University of Liverpool module
 'Semantics of Programming Languages'
 
+## Most recent Important News / Changelog (Up to 3 Posts here)
+### 11/04/2016
+I've decided to re-organise/re-name everything, to help the vast increase of
+information that has been added today.  To that end, I have written a Markdown
+file which explains each folder currently available and what will be in there
+called [RepoTree](RepoTree.md) - give it a read if anything seems confusing or
+lost.  If there were files previously within the folder, any changes will be
+mentioned.  Hopefully though, everything makes sense as to why it is now
+organised in the way it currently is.
+
+### 15/03/2016
+I seem to have been lying and have been slightly ambitious about keeping on
+track with my own notes and uploading them here, but I'll get around to 
+writing the notes up as and when I can, I promise.  I'm about 6 lectures (2
+weeks) behind, currently.
+
 ## Basic Info
-This repository is created as a collection of my notes on the module.  This
-repository should be updated about once a week within the realms of Thursday to
-Sunday.  I will probably begin with writing .org files, then move the 
-information into .tex files to compile the info into PDF.  Links to the
+This repository is created as a collection of my notes on the module, as well
+as the information available from the Module's website.  This repository
+should be updated about once a week within the realms of Thursday to Sunday.
+I will probably begin with writing .org files, then move the information into
+.tex files to compile the info into PDF.  Links to the
 [Module Overview](https://www.csc.liv.ac.uk/teaching/modules/module.php?code=comp317)
 and the [Main page](http://cgi.csc.liv.ac.uk/~grant/Teaching/COMP317/).
-
-EDIT: This seems to be a lie and slightly ambitious but I'll get around to
-writing the notes up as and when I can, I promise.  As of 15/03/2016 I'm about
-6 lectures (2 weeks) behind.
 
 ## Accessing this Information
 You can obtain this repository's information in a variety of different ways:
@@ -45,10 +58,12 @@ compiling the .tex files.
 in their 'raw' form - whilst github knows the basics of formatting .org files,
 it does not account for some of the quirks I have in showing the information
 more easily for those using simple text editors.  As such, some of the examples
-which use sub-scripting may show up incorrectly and will attach the subscript
-sections to the end of the above lines, instead of keeping the formatting.
+which use sub-scripting (such as writing the category underneath something 
+wrapped in double square brackets) may show up incorrectly (and will attach
+the subscript sections to the end of the above lines, instead of keeping the
+formatting).
 
-## File Types
+## File Types for my Notes
 ### Org
 If you have [Emacs](https://www.gnu.org/software/emacs/#Obtaining), .org files 
 will probably be your favoured method of reading the information, due to it's

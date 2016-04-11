@@ -1,0 +1,104 @@
+in simple
+in simpleSemantics
+in Arrays
+
+th  Q1  is
+
+  inc  ARRAY_SEMANTICS .
+  
+  ops  pre post  : Store Int Int -> Bool .
+  
+  var  S : Store .
+  vars X Y : Int .
+  
+  eq  pre(S, X, Y)  =  (S[[ a['x] ]]) is X and (S[[ a['y] ]]) is Y .
+  eq  post(S, X,Y)  =  (S[[ a['x] ]]) is Y and (S[[ a['y] ]]) is X .
+  
+  op  s : -> Store .
+  ops x y : -> Int .
+  
+  eq  (S[[ a['x] ]])  =  x .
+  eq  (S[[ a['y] ]])  =  y .
+  
+endth
+
+red post(s ; 't := a['x] ; a['x] := a['y] ; a['y] := 't, x, y) .
+
+
+fmod  Q2_REQUIREMENT  is
+
+  pr  ARRAYS .
+  
+  op  req : Array Int -> Bool .
+
+  var  A : Array .
+  var  I : Int .
+  
+  ceq  req(A,I)  =  true  if  I <= 0 .
+  ceq  req(A,I)  =  req(A, I - 1) and (A[I - 1] is I - 1)  if  0 < I .
+
+endfm
+
+
+th  Q2  is
+
+  pr  Q2_REQUIREMENT .
+  inc  ARRAY_SEMANTICS .
+  
+  ops  pre post inv  : Store Array -> Bool .
+  
+  var  S : Store .
+  
+  eq  pre(S)  =  true .
+  eq  post(S) =  req(S[[a]], 100) .
+  
+  ops init body : -> Program .
+  op  guard : -> BooleanExpression .
+  
+  eq  init  =  'i := 0 .
+  eq  body  =  a['i] := 'i ; 'i := 'i + 1 .
+  eq  guard =  'i < 100 .
+  
+  eq  inv(S)  =  req(S[[a]], S[['i]]) and 0 <= (S[['i]]) and (S[['i]]) <= 100 .
+  
+endth
+
+
+fmod  ARRAY_SUM  is
+
+  pr  ARRAYS .
+  
+  op  arraySum  : Array Int -> Int .
+  
+  var  A : Array .
+  var  I : Int .
+  
+  ceq  arraySum(A, I)  =  0  if  I <= 0 .
+  ceq  arraySum(A, I)  =  arraySum(A, I - 1) + A[I - 1]  if  0 < I .
+  
+endfm
+
+th  Q3  is
+
+  pr  ARRAY_SUM .
+  inc ARRAY_SEMANTICS .
+  
+  ops pre post inv  : Store Array -> Bool .
+  
+  var  S : Store .
+  var  A : Array .
+  
+  eq  pre(S, A)  =  (S[[a]]) == A .
+  eq  post(S ,A) =  (S[['s]]) is arraySum(A, 100) .
+  
+  ops init body : -> Program .
+  op  guard : -> BooleanExpression .
+  
+  eq  init  =  'i := 0 's := 0 .
+  eq  body  =  's := 's + a['i] ; 'i := 'i + 1 .
+  eq  guard =  'i < 100 .
+  
+  eq  inv(S,A)  =  (S[['s]]) is arraySum(A, S[['i]]) and (S[[a]]) == A
+                   and 0 <= (S[['i]]) and (S[['i]]) <= 100 .
+  
+endth
